@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>今日热榜 - 知乎 & 微博</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+                'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+                sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        
+        .section-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            font-size: 1.5em;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-header.zhihu {
+            background: linear-gradient(135deg, #0084ff 0%, #0066cc 100%);
+        }
+        
+        .section-header.weibo {
+            background: linear-gradient(135deg, #ff6600 0%, #ff3300 100%);
+        }
+        
+        .list {
+            list-style: none;
+        }
+        
+        .list-item {
+            padding: 15px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: background-color 0.3s;
+        }
+        
+        .list-item:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .list-item:last-child {
+            border-bottom: none;
+        }
+        
+        .rank {
+            font-weight: bold;
+            font-size: 1.2em;
+            color: #667eea;
+            min-width: 30px;
+            text-align: center;
+        }
+        
+        .item-content {
+            flex: 1;
+        }
+        
+        .item-title {
+            font-size: 1em;
+            color: #333;
+            margin-bottom: 5px;
+            line-height: 1.4;
+        }
+        
+        .item-heat {
+            font-size: 0.85em;
+            color: #999;
+        }
+        
+        .footer {
+            text-align: center;
+            color: white;
+            padding: 20px;
+            font-size: 0.9em;
+        }
+        
+        .footer a {
+            color: white;
+            text-decoration: underline;
+        }
+        
+        .emoji {
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 今日热榜</h1>
+            <p>知乎 & 微博热榜前十</p>
+            <p style="font-size: 0.9em; margin-top: 10px;">更新时间: 2025年12月08日 08:54:31</p>
+        </div>
+        
+        <div class="content">
+            <div class="section">
+                <div class="section-header zhihu">
+                    <span class="emoji">💡</span>
+                    <span>知乎热榜</span>
+                </div>
+                <ul class="list">
+                    <li class="list-item"><div style="color: #999;">暂无数据</div></li>
+                </ul>
+            </div>
+            
+            <div class="section">
+                <div class="section-header weibo">
+                    <span class="emoji">🔥</span>
+                    <span>微博热搜</span>
+                </div>
+                <ul class="list">
+                    <li class="list-item"><div style="color: #999;">暂无数据</div></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>数据来源: <a href="https://tophub.today/c/news">TopHub 今日热榜</a></p>
+            <p style="margin-top: 10px;">自动生成 | 每日更新</p>
+        </div>
+    </div>
+</body>
+</html>
