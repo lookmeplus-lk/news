@@ -1,34 +1,59 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-TopHub 热榜数据抓取脚本
+TopHub 热榜数据抓取脚本（使用Selenium获取动态内容）
 用于抓取知乎和微博的热榜前十条，生成HTML文件
 """
 
-import requests
-from bs4 import BeautifulSoup
-from datetime import datetime
 import json
 import re
+import os
+import sys
+from datetime import datetime
 from pathlib import Path
+
+# 导入selenium相关库
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.options import Options
+from selenium.common.exceptions import TimeoutException
 
 def fetch_tophub_data():
     """
-    从TopHub抓取知乎和微博的热榜数据
+    使用Selenium获取TopHub的动态加载内容
     """
     url = "https://tophub.today/c/news"
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
-    }
     
+    # 配置Chrome选项
+    chrome_options = Options()
+    chrome_options.add_argument('--headless')
+    chrome_options.add_argument('--no-sandbox')
+    chrome_options.add_argument('--disable-dev-shm-usage')
+    chrome_options.add_argument('--disable-gpu')
+    chrome_options.add_argument('--window-size=1920,1080')
+    chrome_options.add_argument('user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36')
+    
+    driver = None
     try:
-        print("正在获取页面内容...")
-        response = requests.get(url, headers=headers, timeout=15)
-        response.encoding = 'utf-8'
+        # 初始化驱动
+        print("正在初始化Chrome驱动...")
+        # 假设chromedriver已安装在PATH中
+        driver = webdriver.Chrome(options=chrome_options)
+        
+        # 访问页面
+        print(f"正在访问 {url}...")
+        driver.get(url)
+        
+        # 等待页面加载，直到找到热榜列表项
+        print("等待热榜内容加载...")
+        WebDriverWait(driver, 20).until(
+            EC.presence_of_element_located((By.CLASS_NAME, "list-item"))
+        )
         
         # 获取页面文本
-        soup = BeautifulSoup(response.text, 'html.parser')
-        page_text = soup.get_text()
+        page_text = driver.find_element(By.TAG_NAME, "body").text
         
         # 提取知乎和微博热榜数据
         zhihu_items = extract_zhihu_items(page_text)
@@ -40,14 +65,26 @@ def fetch_tophub_data():
             'timestamp': datetime.now().isoformat()
         }
     
+    except TimeoutException:
+        print("错误: 页面加载超时，未能获取到热榜内容。")
+        return {
+            'zhihu': [],
+            'weibo': [],
+            'error': "页面加载超时",
+            'timestamp': datetime.now().isoformat()
+        }
     except Exception as e:
-        print(f"错误: {e}")
+        print(f"Selenium错误: {e}")
         return {
             'zhihu': [],
             'weibo': [],
             'error': str(e),
             'timestamp': datetime.now().isoformat()
         }
+    
+    finally:
+        if driver:
+            driver.quit()
 
 def extract_zhihu_items(text):
     """
